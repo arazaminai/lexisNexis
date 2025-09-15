@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  apache:
+    image: php-apache # Or a custom image with Apache and PHP-FPM
+    networks:
+      - my-network
+    ports:
+      - "80:80"
+    volumes:
+      - ./backend:/var/www/html/ # Mount your project files
+      - ./misc/apache/httpd.conf:/etc/apache2/apache2.conf # Custom Apache config
+  
+  mysql:
+    image: mysql:8.0
+    networks:
+      - my-network
+    environment:
+      MYSQL_ROOT_PASSWORD: qwert1234
+      MYSQL_DATABASE: admin_db
+    volumes:
+      - db_data:/var/lib/mysql # Persistent volume for database data
+    ports:
+      - "3306:3306"
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    networks:
+      - my-network
+    container_name: phpmyadmin-container
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: qwert1234
+    depends_on:
+      - mysql
+
+volumes:
+  db_data: # Define the named volume for database persistence
+
+networks:
+  my-network:
