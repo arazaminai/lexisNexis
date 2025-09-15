@@ -8,8 +8,9 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./backend:/var/www/html/ # Mount your project files
+      - ../:/var/www/html/ # Mount your project files
       - ./misc/apache/httpd.conf:/etc/apache2/apache2.conf # Custom Apache config
+      - ./misc/php/php.ini:/etc/php/8.3/apache2/php.ini # Custom PHP config
   
   mysql:
     image: mysql:8.0
@@ -17,7 +18,7 @@ services:
       - my-network
     environment:
       MYSQL_ROOT_PASSWORD: qwert1234
-      MYSQL_DATABASE: admin_db
+      MYSQL_DATABASE: lexisnexis
     volumes:
       - db_data:/var/lib/mysql # Persistent volume for database data
     ports:
