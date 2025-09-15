@@ -1,5 +1,6 @@
 RewriteEngine On
 
-RewriteCond %{REQUEST_URI} !^/static/
+Options -Indexes
 
-RewriteRule ^.*$ routes.php [L]
+RewriteRule (^|/)\. - [F]
+RewriteRule ^(static/cache|src|docker)/ - [F,L]
