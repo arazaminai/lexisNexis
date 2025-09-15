@@ -1,9 +1,13 @@
 <?php
+require_once "cache.php";
+
 class SearchHandler {
     protected $pdo;
+    protected $cache;
 
     public function __construct($pdo) {
         $this->pdo = $pdo;
+        $this->cache = new Cache();
     }
 
     public function searchDocuments($query) {
@@ -12,6 +16,16 @@ class SearchHandler {
             return $this->jsonResponse(["error" => "Search term too short"], 400);
         }
 
+        // --- 1. Check cache (in-memory basic cache) ---
+        $cached = $this->cache->get($query);
+        if ($cached !== false) {
+            return $this->jsonResponse([
+                "cached" => true,
+                "results" => $cached
+            ]);
+        }
+
+        // --- 2. Run full-text query ---
         $stmt = $this->pdo->prepare("
             SELECT d.id, d.filename, d.filepath, d.filetype, d.uploaded_at,
                    MATCH(i.content) AGAINST (:q IN NATURAL LANGUAGE MODE) AS relevance
@@ -24,11 +38,16 @@ class SearchHandler {
         $stmt->execute([':q' => $query]);
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+        // --- 3. Highlight keywords ---
         foreach ($results as &$row) {
             $row['highlight'] = $this->highlightSnippet($row['id'], $query);
         }
 
+        // --- 4. Store in cache ---
+        $this->cache->set($query, $results, 300); 
+
         return $this->jsonResponse([
+            "cached" => false,
             "results" => $results
         ]);
     }
