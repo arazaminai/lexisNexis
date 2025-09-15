@@ -46,40 +46,119 @@ class DocumentHandler {
             unlink($filePath);
         }
 
+        $stmt = $this->pdo->prepare("DELETE FROM documents WHERE id = :id");
+        $stmt->execute([':id' => $id]);
+
         $this->jsonResponse(["message" => "Document deleted successfully"]);
     }
 
+
+    // Upload a new document
     public function uploadDocument($file) {
-        if (!isset($_FILES['document'])) {
+        if (!isset($file)) {
             return $this->handleError("No file uploaded", 400);
         }
 
-        $file = $_FILES['document'];
-        $allowed = ['text/plain', 'application/pdf'];
-        if (!in_array($file['type'], $allowed)) {
-            return $this->handleError("Unsupported file type", 415);
+        $targetFile = $this->storeFile($file);
+
+        $docId = $this->insertMetadata($file, $targetFile);
+
+        $content = $this->extractText($file['type'], $targetFile);
+
+        if ($content) {
+            $this->insertIndex($docId, $content);
         }
 
-        $filename = basename($file['name']);
-        $uploadDir = __DIR__ . '/../static/uploads/';
-        $targetFile = $uploadDir . time() . '_' . $filename;
-
-        if (move_uploaded_file($file['tmp_name'], $targetFile)) {
-            $stmt = $this->pdo->prepare("INSERT INTO documents (filename, filepath, filetype) VALUES (:filename, :filepath, :filetype)");
-            $stmt->execute([
-                ':filename' => $filename,
-                ':filepath' => $targetFile,
-                ':filetype' => $file['type']
-            ]);
-            $docId = $this->pdo->lastInsertId();
-        } else {
-            return $this->handleError("Failed to move uploaded file", 500);
-        }
-
+        // 6. Response
         return $this->jsonResponse([
             "message" => "File uploaded and indexed successfully",
             "id" => $docId
         ], 201);
+    }
+
+    private function storeFile($file) {
+        $allowed = ['text/plain', 'application/pdf'];
+        if (!in_array($file['type'], $allowed)) {
+            $this->handleError("Only TXT or PDF files allowed", 400);
+        }
+
+        $uploadDir = __DIR__ . '/../static/uploads/';
+        if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+
+        $filename = time() . "_" . basename($file['name']); // avoid collisions
+        $targetFile = $uploadDir . $filename;
+
+        // Open input and output streams
+        $input = fopen($file['tmp_name'], 'rb');
+        if (!$input) {
+            $this->handleError("Failed to open uploaded file", 500);
+        }
+
+        $output = fopen($targetFile, 'wb');
+        if (!$output) {
+            fclose($input);
+            $this->handleError("Failed to open target file for writing", 500);
+        }
+
+        // Stream copy in 8KB chunks
+        while (!feof($input)) {
+            $chunk = fread($input, 8192);
+            fwrite($output, $chunk);
+        }
+
+        fclose($input);
+        fclose($output);
+
+        return $targetFile;
+    }
+
+    private function insertMetadata($file, $targetFile) {
+        try {
+            $stmt = $this->pdo->prepare("
+                INSERT INTO documents (filename, filepath, filetype, filesize)
+                VALUES (:filename, :filepath, :filetype, :filesize)
+            ");
+            $stmt->execute([
+                ':filename' => basename($targetFile),
+                ':filepath' => 'uploads/' . basename($targetFile),
+                ':filetype' => $file['type'],
+                ':filesize' => filesize($targetFile)
+            ]);
+            return $this->pdo->lastInsertId();
+        } catch (PDOException $e) {
+            $this->handleError("Failed to save metadata: " . $e->getMessage(), 500);
+        }
+    }
+
+    private function extractText($fileType, $targetFile) {
+        $content = "";
+        if ($fileType === 'text/plain') {
+            $content = file_get_contents($targetFile);
+        } elseif ($fileType === 'application/pdf') {
+            $tmpTxt = $targetFile . ".txt";
+            exec("pdftotext -layout " . escapeshellarg($targetFile) . " " . escapeshellarg($tmpTxt));
+            if (file_exists($tmpTxt)) {
+                $content = file_get_contents($tmpTxt);
+                $content = trim($content); // remove extra spaces/newlines
+                unlink($tmpTxt);
+            }
+        }
+        return $content;
+    }
+
+    private function insertIndex($docId, $content) {
+        try {
+            $stmt = $this->pdo->prepare("
+                INSERT INTO document_index (doc_id, content)
+                VALUES (:doc_id, :content)
+            ");
+            $stmt->execute([
+                ':doc_id' => $docId,
+                ':content' => $content
+            ]);
+        } catch (PDOException $e) {
+            $this->handleError("Failed to index document: " . $e->getMessage(), 500);
+        }
     }
 
 
