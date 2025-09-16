@@ -6,7 +6,7 @@ services:
     networks:
       - my-network
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
       - ../:/var/www/html/ # Mount your project files
       - ./misc/apache/httpd.conf:/etc/apache2/apache2.conf # Custom Apache config

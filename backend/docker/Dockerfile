@@ -26,7 +26,7 @@ RUN apt-get update \
     
 COPY misc/apache/httpd.conf /etc/apache2/apache2.conf
 
-COPY ..backend/ /var/www/html/
+COPY ../ /var/www/html/
 WORKDIR /var/www/html/
 EXPOSE 80
-CMD ["tail", "-f", "/var/log/apache2/access.log"]
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
