@@ -24,8 +24,19 @@ export class DocumentService {
 
     // Delete a document
   deleteDocument(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/documents/${id}`);
+    return this.http.delete(`${this.apiUrl}/documents/?id=${id}`);
   }   
+
+    // View a document
+  viewDocument(id: number) {
+    // Implement view logic, e.g., open in a new tab
+    window.open(`http://localhost:8080/api/documents/?id=${id}`, '_blank');
+  }
+
+  downloadDocument($filepath: string) {
+    // Implement download logic
+    window.location.href = `http://localhost:8080${$filepath}`;
+  }
 
   // Search documents
   searchDocuments(query: string): Observable<any> {

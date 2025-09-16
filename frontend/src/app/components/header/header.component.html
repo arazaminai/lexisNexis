@@ -1,0 +1,21 @@
+<mat-toolbar color="primary" class="header-toolbar">
+    <mat-toolbar-row class="header-row-1">
+        <span class="header-title">📂 DocManager</span>
+        <span class="spacer"></span>
+
+        <div class="search-box">
+            <app-search-bar ></app-search-bar>
+        </div>
+
+        <span class="spacer"></span>
+
+        <button mat-icon-button (click)="openUploadDialog()">
+            <mat-icon>upload_file</mat-icon>
+        </button>
+    </mat-toolbar-row>
+    <mat-toolbar-row class="header-row-2">
+        <div class="search-box">
+            <app-search-bar ></app-search-bar>
+        </div>
+    </mat-toolbar-row>
+</mat-toolbar>

@@ -1,0 +1,51 @@
+.header-toolbar {
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    
+    .title {
+        font-size: 1.4rem;
+        font-weight: bold;
+    }
+    
+    .spacer {
+        flex: 1;
+    }
+    
+    .header-row-1 {
+        .search-box {
+            margin-top: 1.1rem;
+            width: 70vw;
+        }
+    }
+    .header-row-2 {
+        display: none;
+    }
+}
+
+// Add responsiveness
+@media (max-width: 600px) {
+    .header-toolbar {
+        .header-row-1{
+            flex-direction: row;
+            align-items: center;
+            
+            .search-box {
+                display: none;
+            }
+        }
+
+        .header-row-2 {
+            display: flex;;
+            margin-top: 0.5rem;
+            justify-content: center;
+    
+            .search-box {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 0;
+            }
+        }
+    }
+}

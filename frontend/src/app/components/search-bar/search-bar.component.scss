@@ -1,0 +1,31 @@
+.search-field {
+  width: 100%;          // input width
+  min-width: 200px;     // prevent it from being too small on mobile
+//   max-width: 800px;     // optional max width
+//   margin: 0 auto;       // center horizontally
+  display: block;
+
+  input.mat-input-element {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+.mat-autocomplete-panel {
+  max-height: 300px;         // limit height of dropdown
+  overflow-y: auto;          // scroll if too many results
+  font-size: 14px;
+
+  mat-option {
+    padding: 8px 12px;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+
+    mark {
+      background-color: yellow; // highlight from backend
+      font-weight: bold;
+    }
+  }
+}

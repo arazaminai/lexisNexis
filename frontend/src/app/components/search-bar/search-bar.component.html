@@ -1,2 +1,20 @@
-<input [(ngModel)]="query" placeholder="Search documents..." />
-    <button (click)="doSearch()">Search</button>
+<mat-form-field appearance="outline" class="search-field">
+  <input
+    type="text"
+    matInput
+    placeholder="Search documents..."
+    [formControl]="searchControl"
+    [matAutocomplete]="auto"
+    (blur)="onBlur()"
+  />
+</mat-form-field>
+
+<mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption>
+  <mat-option
+    *ngFor="let result of results"
+    [value]="result.filename"
+    (onSelectionChange)="selectItem(result)"
+  >
+    <span [innerHTML]="result.highlight || result.filename"></span>
+  </mat-option>
+</mat-autocomplete>
