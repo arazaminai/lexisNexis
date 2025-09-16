@@ -4,7 +4,7 @@ include '../../src/db.php';
 require '../../src/documentHandler.php';
 
 // Allow CORS (for testing, adjust in production)
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: http://localhost"); // or "*" for all origins
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
