@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl, FormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -32,6 +32,7 @@ import { SearchBarComponent } from '../search-bar/search-bar.component';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
+  @Output() uploadComplete = new EventEmitter<void>();
   private documentService:DocumentService = inject(DocumentService);
   private dialog = inject(MatDialog);
 
@@ -49,6 +50,9 @@ export class HeaderComponent {
   openUploadDialog() {
     this.dialog.open(UploadDocumentComponent, {
       width: '500px'
+    }).componentInstance.uploadComplete.subscribe(() => {
+      this.dialog.closeAll();
+      this.uploadComplete.emit();
     });
   }
 }

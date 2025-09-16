@@ -1,11 +1,4 @@
 <div class="container">
-  <app-header></app-header>
-  <h1>Document Search</h1>
-  <!-- <app-search-bar (selectResult)="onSelectDocument($event)"></app-search-bar> -->
-  <!-- <div *ngIf="selectedDoc">
-    <h3>Selected Document:</h3>
-    <p>{{ selectedDoc.filename }}</p>
-  </div> -->
-  <app-upload-document (uploadComplete)="onUploadComplete()"></app-upload-document>
+  <app-header (uploadComplete)="onUploadComplete()"></app-header>
   <app-document-list [documents]="results"></app-document-list>
 </div>
