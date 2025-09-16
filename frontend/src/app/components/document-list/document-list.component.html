@@ -1,0 +1,10 @@
+<div *ngIf="!documents?.length">No results found.</div>
+
+<div *ngFor="let doc of documents" class="doc">
+  <h3>{{ doc.filename }}</h3>
+  <p [innerHTML]="doc.highlight || ''"></p>
+  <small>{{ doc.filetype }} - {{ doc.uploaded_at }}</small>
+  <button (click)="viewDocument(doc.id)">View Document</button>
+  <button (click)="downloadDocument(doc.filepath)">Download</button>
+  <button (click)="deleteDocument(doc.id)">Delete</button>
+</div>
