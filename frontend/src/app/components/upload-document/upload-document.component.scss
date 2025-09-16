@@ -1,0 +1,50 @@
+.drop-zone {
+  display: block;
+  border: 2px dashed #888;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color .15s ease-in-out;
+  user-select: none;
+
+  &.drag-over {
+    background-color: #f0f8ff;
+    border-color: #007acc;
+  }
+
+  .placeholder {
+    pointer-events: none; // clicks go to the label (which opens the file input)
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+  }
+  small { color: #666; }
+}
+
+.actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  button {
+    padding: 8px 14px;
+    border: none;
+    background: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  button:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+  }
+
+  .status {
+    font-size: .95rem;
+    color: #333;
+  }
+}

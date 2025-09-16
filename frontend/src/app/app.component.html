@@ -1,5 +1,6 @@
 <div class="container">
   <h1>Document Search</h1>
   <app-search-bar (search)="onSearch($event)"></app-search-bar>
+  <app-upload-document (uploadComplete)="onUploadComplete()"></app-upload-document>
   <app-document-list [documents]="results"></app-document-list>
 </div>

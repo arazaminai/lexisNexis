@@ -1,0 +1,32 @@
+<!-- Wrap input inside the label so clicking anywhere in the label opens file picker -->
+<label
+  class="drop-zone"
+  [class.drag-over]="dragOver"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave($event)"
+  (drop)="onDrop($event)"
+>
+  <input
+    type="file"
+    (change)="onFileSelected($event)"
+    accept=".pdf,text/plain"
+    hidden
+  />
+
+  <div class="placeholder">
+    <ng-container *ngIf="!selectedFile">
+      <p><strong>Drag & drop</strong> a file here, or <u>click</u> to select</p>
+      <small>PDF or TXT only</small>
+    </ng-container>
+
+    <ng-container *ngIf="selectedFile">
+      <p>Selected: {{ selectedFile.name }}</p>
+      <small>{{ selectedFile.type }} — {{ selectedFile.size | number }} bytes</small>
+    </ng-container>
+  </div>
+</label>
+
+<div class="actions">
+  <button (click)="onUpload()" [disabled]="!selectedFile">Upload</button>
+  <p class="status" *ngIf="uploadStatus">{{ uploadStatus }}</p>
+</div>
