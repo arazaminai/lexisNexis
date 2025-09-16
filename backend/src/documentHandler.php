@@ -1,6 +1,7 @@
 <?php 
 class DocumentHandler {
     protected $pdo;
+    protected $uploadpath = "/static/uploads/";
 
     public function __construct($pdo) {
         $this->pdo = $pdo;
@@ -82,7 +83,7 @@ class DocumentHandler {
             $this->handleError("Only TXT or PDF files allowed", 400);
         }
 
-        $uploadDir = __DIR__ . '/../static/uploads/';
+        $uploadDir = __DIR__ . '/..' . $this->uploadpath;
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
         $filename = time() . "_" . basename($file['name']); // avoid collisions
@@ -120,7 +121,7 @@ class DocumentHandler {
             ");
             $stmt->execute([
                 ':filename' => basename($targetFile),
-                ':filepath' => 'uploads/' . basename($targetFile),
+                ':filepath' => $this->uploadpath . basename($targetFile),
                 ':filetype' => $file['type'],
                 ':filesize' => filesize($targetFile)
             ]);
