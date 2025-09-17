@@ -3,7 +3,6 @@ FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive \
     TZ=Etc/UTC
 
-# 
 RUN apt-get update \
     && apt-get install -y software-properties-common lsb-release ca-certificates apt-transport-https wget gnupg \
     && add-apt-repository ppa:ondrej/php -y \

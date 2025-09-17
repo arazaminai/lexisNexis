@@ -25,8 +25,8 @@ export class DocumentService {
   }
 
   // List all documents
-  listDocuments(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/documents/`);
+  listDocuments(): Observable<Document[]> {
+    return this.http.get(`${this.apiUrl}/documents/`) as Observable<Document[]>;
   }
 
     // Delete a document

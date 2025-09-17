@@ -12,9 +12,9 @@ class SearchHandler {
 
     public function searchDocuments($query) {
         $query = trim($query);
-        if (strlen($query) < 3) {
-            return $this->jsonResponse(["error" => "Search term too short"], 400);
-        }
+        // if (strlen($query) < 3) {
+        //     return $this->jsonResponse(["error" => "Search term too short"], 400);
+        // }
 
         // --- 1. Check cache (in-memory basic cache) ---
         $cached = $this->cache->get($query);

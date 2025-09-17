@@ -5,9 +5,9 @@ import { Subject, Observable } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { SearchResult } from '../../models/documents';
 import { DocumentSearchService } from '../../services/document-search.service';
 import { DocumentService } from '../../services/document.service';
+import { SearchResult } from '../../models/documents';
 
 
 @Component({
