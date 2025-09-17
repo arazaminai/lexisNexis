@@ -8,6 +8,8 @@ import { HttpClient } from '@angular/common/http';
 import { DetailsDialogueComponent } from './details/details-dialogue.component';
 import { DeleteDialog } from './delete/delete-dialogue.component';
 import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { DocumentService } from '../../services/document.service';
 
 @Component({
   selector: 'app-document-list',
@@ -15,23 +17,51 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [
     CommonModule,
     MatCardModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatSnackBarModule,
     MatIconModule,
-    DetailsDialogueComponent
+    MatButtonModule,
+    MatPaginatorModule,
+    MatSnackBarModule
   ],
   templateUrl: './document-list.component.html',
   styleUrls: ['./document-list.component.scss']
 })
 export class DocumentListComponent {
-  @Input() documents: any[] = [];
+  documents: any[] = [];       // full document list
+  pagedDocuments: any[] = [];  // current page
+  pageSize = 16;
+  pageIndex = 0;
 
   constructor(
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private http: HttpClient
+    private http: HttpClient,
+    private docService: DocumentService
   ) {}
+
+  ngOnInit() {
+    this.loadDocuments();
+  }
+
+  loadDocuments() {
+    // replace with your HTTP service
+    // this.documents = fetchedDocuments
+    this.docService.listDocuments().subscribe(docs => {
+      this.documents = docs;
+      this.updatePagedDocuments();
+    });
+  }
+
+  updatePagedDocuments() {
+    const start = this.pageIndex * this.pageSize;
+    const end = start + this.pageSize;
+    this.pagedDocuments = this.documents.slice(start, end);
+  }
+
+  onPageChange(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.updatePagedDocuments();
+  }
 
   openDocumentDialog(doc: any) {
     this.dialog.open(DetailsDialogueComponent, {
