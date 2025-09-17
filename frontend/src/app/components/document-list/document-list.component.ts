@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
+import type { Document } from '../../models/documents';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatCardModule } from '@angular/material/card';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { DetailsDialogueComponent } from './details/details-dialogue.component';
@@ -24,8 +24,8 @@ import { DocumentSearchService } from '../../services/document-search.service';
   styleUrls: ['./document-list.component.scss']
 })
 export class DocumentListComponent {
-  @Input() documents: any[] = [];       // full document list
-  pagedDocuments: any[] = [];  // current page
+  @Input() documents: Document[] = [];       // full document list
+  pagedDocuments: Document[] = [];  // current page
   pageSize = 10;
   pageIndex = 0;
 
@@ -54,8 +54,17 @@ export class DocumentListComponent {
   }
 
   loadDocuments() {
+    
     this.docService.listDocuments().subscribe(docs => {
-      this.documents = docs;
+        this.documents = docs.map((d: any) => ({
+        id: d.id,
+        filename: d.filename,
+        filepath: d.filepath,
+        filetype: d.filetype,
+        uploaded_at: d.uploaded_at,
+        relevance: d.relevance,
+        highlight: d.highlight
+      }));
       this.updatePagedDocuments();
     });
   }
@@ -72,14 +81,14 @@ export class DocumentListComponent {
     this.updatePagedDocuments();
   }
 
-  openDocumentDialog(doc: any) {
+  openDocumentDialog(doc: Document) {
     this.dialog.open(DetailsDialogueComponent, {
       width: '500px',
-      data: doc
+      data: (doc && { host: this.docService.hostUrl, ...doc }) 
     });
   }
 
-  confirmDelete(doc: any) {
+  confirmDelete(doc: Document) {
     const dialogRef = this.dialog.open(DeleteDialog, {
       width: '500px',
       data: { filename: doc.filename }
@@ -92,7 +101,7 @@ export class DocumentListComponent {
     });
   }
 
-  deleteDocument(doc: any) {
+  deleteDocument(doc: Document) {
     this.docService.deleteDocument(doc.id).subscribe({
       next: () => {
         this.documents = this.documents.filter(d => d.id !== doc.id);

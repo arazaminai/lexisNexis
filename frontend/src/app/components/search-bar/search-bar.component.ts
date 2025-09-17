@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, Observable } from 'rxjs';
@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { DocumentSearchService } from '../../services/document-search.service';
 import { DocumentService } from '../../services/document.service';
-import { SearchResult } from '../../models/documents';
+import { Document } from '../../models/documents';
 
 
 @Component({
@@ -26,7 +26,7 @@ export class SearchBarComponent {
   query = '';
   sortOption: 'relevance' | 'date' = 'relevance';
   private searchSubject = new Subject<string>();
-  results: SearchResult[] = [];
+  results: Document[] = [];
 
   constructor(
     private docService: DocumentService,
@@ -36,8 +36,8 @@ export class SearchBarComponent {
     this.searchSubject.pipe(
       debounceTime(300),
       switchMap(q => this.search(q ?? ""))
-    ).subscribe(res => {
-      this.results = res.results || [];
+    ).subscribe((res: { results: Document[] }) => {
+      this.results = Array.isArray(res.results) ? res.results : [];
       this.sortResults();
     });
   }
@@ -53,7 +53,7 @@ export class SearchBarComponent {
   }
 
 
-  private search(q: string): Observable<any> {
+  private search(q: string): Observable<{ results: Document[] }> {
     if (!q) {
       return new Observable(observer => {
         observer.next({ results: [] });
@@ -63,13 +63,12 @@ export class SearchBarComponent {
     return this.docService.searchDocuments(q);
   }
 
-  sortResults(): any {
+  sortResults(): void {
     if (this.sortOption === 'relevance') {
-      this.results.sort((a, b) => b.relevance - a.relevance);
+      this.results.sort((a, b) => (b.relevance ?? 0) - (a.relevance ?? 0));
     } else {
       this.results.sort((a, b) => new Date(b.uploaded_at).getTime() - new Date(a.uploaded_at).getTime());
     }
     this.searchService.setResults(this.results);
-    return true;
   }
 }

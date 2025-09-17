@@ -5,7 +5,7 @@
     <p [innerHTML]="data.highlight"></p>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <a [href]="'http://localhost:8080' + data.filepath" target="_blank">
+    <a [href]="data.host + data.filepath" target="_blank">
         <button mat-button>Download</button>
     </a>
     <button mat-button mat-dialog-close>Close</button>
