@@ -1,4 +1,3 @@
-<!-- Wrap input inside the label so clicking anywhere in the label opens file picker -->
 <label
   class="drop-zone"
   [class.drag-over]="dragOver"
@@ -27,6 +26,6 @@
 </label>
 
 <div class="actions">
-  <button (click)="onUpload()" [disabled]="!selectedFile">Upload</button>
   <p class="status" *ngIf="uploadStatus">{{ uploadStatus }}</p>
+  <button (click)="onUpload()" [disabled]="!selectedFile">Upload</button>
 </div>

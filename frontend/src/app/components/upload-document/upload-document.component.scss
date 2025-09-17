@@ -15,25 +15,26 @@
 
   .placeholder {
     pointer-events: none; // clicks go to the label (which opens the file input)
+    color: #ffffff;
   }
 
   p {
     margin: 0;
     font-size: 1rem;
   }
-  small { color: #666; }
+  small { color: #9c9c9c; }
 }
 
 .actions {
   margin-top: 12px;
   display: flex;
   gap: 12px;
-  align-items: center;
+  align-items: flex-end;
 
   button {
     padding: 8px 14px;
     border: none;
-    background: #007bff;
+    background: #2a2a2a  !important;
     color: #fff;
     border-radius: 4px;
     cursor: pointer;
@@ -45,6 +46,6 @@
 
   .status {
     font-size: .95rem;
-    color: #333;
+    color: #3f3f3f;
   }
 }

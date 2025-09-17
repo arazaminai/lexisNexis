@@ -17,24 +17,4 @@ import { HeaderComponent } from './components/header/header.component';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
-  results: any[] = [];
-  selectedDoc: any = null;
-
-
-  constructor(private docService: DocumentService) {}
-
-  ngOnInit() {
-    this.onUploadComplete();
-  }
-
-  onUploadComplete() {
-    this.docService.listDocuments().subscribe(res => {
-      this.results = res;
-    });
-  }
-
-  onSelectDocument(doc: any) {
-    this.selectedDoc = doc;
-  }
-}
+export class AppComponent { }

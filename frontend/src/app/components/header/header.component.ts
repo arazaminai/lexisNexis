@@ -33,26 +33,29 @@ import { SearchBarComponent } from '../search-bar/search-bar.component';
 })
 export class HeaderComponent {
   @Output() uploadComplete = new EventEmitter<void>();
-  private documentService:DocumentService = inject(DocumentService);
+  // private documentService:DocumentService = inject(DocumentService);
   private dialog = inject(MatDialog);
 
   searchControl = new FormControl('');
   filteredResults!: Observable<any[]>;
 
-  constructor() {
+  constructor(
+    private docService: DocumentService
+  ) {
     this.filteredResults = this.searchControl.valueChanges.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap(query => this.documentService.searchDocuments(query || ''))
+      switchMap(query => this.docService.searchDocuments(query || ''))
     );
   }
 
   openUploadDialog() {
     this.dialog.open(UploadDocumentComponent, {
-      width: '500px'
+      width: '900px',
+      // height: '200px',
     }).componentInstance.uploadComplete.subscribe(() => {
       this.dialog.closeAll();
-      this.uploadComplete.emit();
+      this.docService.setRefresh(true);
     });
   }
 }

@@ -1,8 +1,15 @@
+main {
+    position: relative;
+    min-height: 86.3vh;
+}
+
 .docs-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); // smaller box
     gap: 12px;
     padding: 16px;
+    padding-bottom: 8vh;
+    // margin-bottom: calc(50px + 1rem); // space for paginator
 }
 
 .doc-card {
@@ -31,16 +38,17 @@
     align-items: center;
     justify-content: center;
     //   height: 100px; // smaller box
-    background: #d6d6d6;
+    background: #000000;
     border-radius: 8px;
-    width: 100%;
+    // width: 90%;
+    margin: 0.5rem 0.5rem 0.1rem ;
     //   margin-bottom: 10px;
 
     mat-icon {
-        height: 150px; // BIGGER icon
-        width: 150px; // BIGGER icon
-        font-size: 150px; // BIGGER icons
-        color: #000102;
+        height: 130px; // BIGGER icon
+        width: 130px; // BIGGER icon
+        font-size: 125px; // BIGGER icons
+        color: #ffffff;
     }
 }
 
@@ -79,8 +87,9 @@
 }
 
 .paginator {
-    // always at the bottom of the page
+    // always at the bottom of the page even when scrolling and if there are few items
     position: absolute;
     bottom: 0;
-    width: 100vw;
+    width: 100%;
+    
 }

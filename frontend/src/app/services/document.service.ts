@@ -1,14 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DocumentService {
   private apiUrl = 'http://localhost:8080/api'; // <-- PHP backend
+  
+  private refereshSubject = new BehaviorSubject<boolean>(false);
+  refresh$: Observable<boolean> = this.refereshSubject.asObservable();
 
   constructor(private http: HttpClient) {}
+
+  setRefresh(value: boolean) {
+    this.refereshSubject.next(value);
+  }
 
   // Upload a document
   uploadDocument(file: File): Observable<any> {

@@ -49,7 +49,11 @@ export class DocumentListComponent {
       this.pageIndex = 0;
       this.updatePagedDocuments();
     });
-    this.loadDocuments();
+
+    this.docService.refresh$.subscribe(refresh => {
+        this.loadDocuments();
+    });
+
   }
 
   loadDocuments() {
@@ -80,7 +84,7 @@ export class DocumentListComponent {
 
   confirmDelete(doc: any) {
     const dialogRef = this.dialog.open(DeleteDialog, {
-      width: '300px',
+      width: '500px',
       data: { filename: doc.filename }
     });
 
@@ -92,10 +96,11 @@ export class DocumentListComponent {
   }
 
   deleteDocument(doc: any) {
-    this.docService.deleteDocument(doc).subscribe({
+    this.docService.deleteDocument(doc.id).subscribe({
       next: () => {
         this.documents = this.documents.filter(d => d.id !== doc.id);
         this.snackBar.open('File deleted successfully', 'Close', { duration: 3000 });
+        this.updatePagedDocuments();
       },
       error: () => {
         this.snackBar.open('Failed to delete file', 'Close', { duration: 3000 });
