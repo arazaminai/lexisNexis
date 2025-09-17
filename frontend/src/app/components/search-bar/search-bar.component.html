@@ -1,20 +1,22 @@
-<mat-form-field appearance="outline" class="search-field">
-  <input
-    type="text"
-    matInput
-    placeholder="Search documents..."
-    [formControl]="searchControl"
-    [matAutocomplete]="auto"
-    (blur)="onBlur()"
-  />
-</mat-form-field>
+<div class="search-sort-container">
+  <!-- Search -->
+  <div class="search-container">
+    <mat-form-field class="search-field" appearance="outline">
+      <input
+        matInput
+        [(ngModel)]="query"
+        (input)="onInput()"
+        placeholder="Search documents..."
+      />
+    </mat-form-field>
+  </div>
 
-<mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption>
-  <mat-option
-    *ngFor="let result of results"
-    [value]="result.filename"
-    (onSelectionChange)="selectItem(result)"
-  >
-    <span [innerHTML]="result.highlight || result.filename"></span>
-  </mat-option>
-</mat-autocomplete>
+  <!-- Sort -->
+  <mat-form-field appearance="outline" class="sort-field">
+    <mat-label>Sort by</mat-label>
+    <mat-select [(value)]="sortOption" (selectionChange)="sortResults()"> 
+      <mat-option value="relevance">Relevance</mat-option>
+      <mat-option value="date">Date</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div> 

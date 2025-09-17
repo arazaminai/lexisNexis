@@ -10,6 +10,7 @@ import { DeleteDialog } from './delete/delete-dialogue.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { DocumentService } from '../../services/document.service';
+import { DocumentSearchService } from '../../services/document-search.service';
 
 @Component({
   selector: 'app-document-list',
@@ -26,7 +27,7 @@ import { DocumentService } from '../../services/document.service';
   styleUrls: ['./document-list.component.scss']
 })
 export class DocumentListComponent {
-  documents: any[] = [];       // full document list
+  @Input() documents: any[] = [];       // full document list
   pagedDocuments: any[] = [];  // current page
   pageSize = 16;
   pageIndex = 0;
@@ -34,17 +35,24 @@ export class DocumentListComponent {
   constructor(
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private http: HttpClient,
-    private docService: DocumentService
+    private docService: DocumentService,
+    private searchService: DocumentSearchService
   ) {}
 
   ngOnInit() {
+    this.searchService.results$.subscribe(results => {
+      if (results === null) {
+        this.loadDocuments();
+        return;
+      }
+      this.documents = results ?? [];
+      this.pageIndex = 0;
+      this.updatePagedDocuments();
+    });
     this.loadDocuments();
   }
 
   loadDocuments() {
-    // replace with your HTTP service
-    // this.documents = fetchedDocuments
     this.docService.listDocuments().subscribe(docs => {
       this.documents = docs;
       this.updatePagedDocuments();
@@ -84,7 +92,7 @@ export class DocumentListComponent {
   }
 
   deleteDocument(doc: any) {
-    this.http.delete(`http://localhost:8080/api/documents/?id=${doc.id}`).subscribe({
+    this.docService.deleteDocument(doc).subscribe({
       next: () => {
         this.documents = this.documents.filter(d => d.id !== doc.id);
         this.snackBar.open('File deleted successfully', 'Close', { duration: 3000 });

@@ -1,31 +1,45 @@
-.search-field {
-  width: 100%;          // input width
-  min-width: 200px;     // prevent it from being too small on mobile
-//   max-width: 800px;     // optional max width
-//   margin: 0 auto;       // center horizontally
-  display: block;
-
-  input.mat-input-element {
-    font-size: 14px;
-    padding: 8px;
-  }
+.search-sort-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  justify-content: center;
 }
 
-.mat-autocomplete-panel {
-  max-height: 300px;         // limit height of dropdown
-  overflow-y: auto;          // scroll if too many results
-  font-size: 14px;
+.search-container {
+  position: relative;
+  flex: 1;
+  max-width: 40vw; // smaller than before
+}
 
-  mat-option {
+.search-field {
+  width: 100%;
+}
+
+.sort-field {
+  width: 160px; // compact size for dropdown
+}
+
+.search-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  max-height: 250px;
+  overflow-y: auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+
+  li {
     padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.04);
-    }
-
-    mark {
-      background-color: yellow; // highlight from backend
-      font-weight: bold;
+      background: #f5f5f5;
     }
   }
 }

@@ -1,12 +1,15 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { Subject, Observable } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { SearchResult } from '../../models/documents';
+import { DocumentSearchService } from '../../services/document-search.service';
+import { DocumentService } from '../../services/document.service';
+
 
 @Component({
   selector: 'app-search-bar',
@@ -14,45 +17,61 @@ import { Observable, of } from 'rxjs';
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    MatInputModule,
     MatFormFieldModule,
-    MatAutocompleteModule
+    MatInputModule,
+    MatSelectModule
   ],
   templateUrl: './search-bar.component.html',
   styleUrls: ['./search-bar.component.scss']
 })
 export class SearchBarComponent {
-  searchControl = new FormControl('');
-  results: any[] = [];
-  // @Output() selectResult = new EventEmitter<any>();
+  query = '';
+  sortOption: 'relevance' | 'date' = 'relevance';
+  private searchSubject = new Subject<string>();
+  results: SearchResult[] = [];
 
-  constructor(private http: HttpClient) {
-    // Debounced real-time search
-    this.searchControl.valueChanges.pipe(
+  constructor(
+    private docService: DocumentService,
+    private searchService: DocumentSearchService
+
+  ) {
+    this.searchSubject.pipe(
       debounceTime(300),
-      switchMap(q => this.searchDocuments(q ?? ""))
+      switchMap(q => this.search(q ?? ""))
     ).subscribe(res => {
-      this.results = res || [];
+      this.results = res.results || [];
+      this.sortResults();
     });
   }
 
-  searchDocuments(query: string): Observable<any[]> {
-    if (!query || query.trim().length < 2) return of([]);
-    return this.http.get<any>(`http://localhost:8080/api/search/?q=${encodeURIComponent(query)}`)
-      .pipe(
-        switchMap(res => of(res.results || []))
-      );
+  onInput() {
+    const trimmedQuery = this.query.trim();
+
+    if (!trimmedQuery) {
+      this.searchService.clearResults(); 
+    } else {
+      this.searchSubject.next(trimmedQuery);
+    }
   }
 
-  selectItem(item: any) {
-    this.searchControl.setValue(item.filename);
-    // this.selectResult.emit(item);
+
+  private search(q: string): Observable<any> {
+    if (!q) {
+      return new Observable(observer => {
+        observer.next({ results: [] });
+        observer.complete();
+      });
+    }
+    return this.docService.searchDocuments(q);
   }
 
-  onBlur() {
-    // optional: delay hiding dropdown if needed
-    // mat-autocomplete handles this automatically
+  sortResults(): any {
+    if (this.sortOption === 'relevance') {
+      this.results.sort((a, b) => b.relevance - a.relevance);
+    } else {
+      this.results.sort((a, b) => new Date(b.uploaded_at).getTime() - new Date(a.uploaded_at).getTime());
+    }
+    this.searchService.setResults(this.results);
+    return true;
   }
 }

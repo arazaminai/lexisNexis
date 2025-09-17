@@ -1,24 +1,35 @@
-<mat-paginator
-  [length]="documents.length"
-  [pageSize]="pageSize"
-  [pageSizeOptions]="[16]"
-  (page)="onPageChange($event)">
-</mat-paginator>
+<div class="docs-container">
+    <div 
+        class="doc-card" 
+        *ngFor="let doc of pagedDocuments"
+    >
+        <div (click)="openDocumentDialog(doc)">
+            <div class="doc-thumbnail">
+                <mat-icon *ngIf="doc.filetype === 'application/pdf'">picture_as_pdf</mat-icon>
+                <mat-icon *ngIf="doc.filetype === 'text/plain'">description</mat-icon>
+            </div>
 
-<div class="document-list">
-  <div class="document-card" *ngFor="let doc of pagedDocuments">
-    <mat-card>
-      <mat-icon>{{ doc.filetype === 'application/pdf' ? 'picture_as_pdf' : 'description' }}</mat-icon>
-      <mat-card-content (click)="openDocumentDialog(doc)">
-        <h4>{{ doc.filename }}</h4>
-        <p>{{ doc.uploaded_at | date:'short' }}</p>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-icon-button color="warn" (click)="confirmDelete(doc)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </mat-card-actions>
-    </mat-card>
-  </div>
+            <div class="doc-info">
+                <h3>{{ doc.filename }}</h3>
+                <p class="modified">Modified: {{ doc.uploaded_at | date:'mediumDate' }}</p>
+            </div>
+        </div>
+
+        <div class="doc-actions">
+            <button 
+                mat-icon-button 
+                (click)="confirmDelete(doc)"
+            >
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+    </div>
 </div>
 
+<!-- Pagination -->
+<mat-paginator class="paginator"
+    [length]="documents.length" 
+    [pageSize]="20" 
+    (page)="onPageChange($event)" 
+    showFirstLastButtons>
+</mat-paginator>

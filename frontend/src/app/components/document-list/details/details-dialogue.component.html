@@ -2,7 +2,6 @@
 <mat-dialog-content>
     <p><strong>File type:</strong> {{ data.filetype }}</p>
     <p><strong>Uploaded at:</strong> {{ data.uploaded_at | date:'medium' }}</p>
-    <p *ngIf="data.highlight"><strong>Preview:</strong></p>
     <p [innerHTML]="data.highlight"></p>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
