@@ -32,12 +32,12 @@ export class DocumentService {
 
   // List all documents
   listDocuments(): Observable<Document[]> {
-    return this.http.get(`${this.apiUrl}/documents/`) as Observable<Document[]>;
+    return this.http.get<Document[]>(`${this.apiUrl}/documents/`);
   }
 
     // Delete a document
-  deleteDocument(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/documents/?id=${id}`);
+  deleteDocument(id: number): Observable<{message: string}> {
+    return this.http.delete(`${this.apiUrl}/documents/?id=${id}`) as Observable<{message: string}>;
   }   
 
     // View a document
@@ -57,3 +57,4 @@ export class DocumentService {
     return this.http.get(`${this.apiUrl}/search/`, { params });
   }
 }
+

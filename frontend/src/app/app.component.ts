@@ -10,6 +10,5 @@ import { HeaderComponent } from './components/header/header.component';
     DocumentListComponent, 
   ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
 })
 export class AppComponent { }

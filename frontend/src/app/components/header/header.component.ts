@@ -41,7 +41,6 @@ export class HeaderComponent {
   openUploadDialog() {
     this.dialog.open(UploadDocumentComponent, {
       width: '900px',
-      // height: '200px',
     }).componentInstance.uploadComplete.subscribe(() => {
       this.dialog.closeAll();
       this.docService.setRefresh(true);
