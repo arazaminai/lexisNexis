@@ -52,18 +52,12 @@ export class UploadDocumentComponent {
     }
 
     const formData = new FormData();
-    // backend expects 'document' or 'file' — use what your API expects
     formData.append('document', this.selectedFile);
 
     this.http.post('http://localhost:8080/api/documents/', formData).subscribe({
       next: () => {
-        this.uploadStatus = '✅ File uploaded successfully!';
         this.selectedFile = null;
         this.uploadComplete.emit();
-
-        setTimeout(() => {
-          this.uploadStatus = '';
-        }, 3000);
       },
       error: (err) => {
         console.error(err);

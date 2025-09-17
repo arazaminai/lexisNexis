@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, Observable } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { SearchResult } from '../../models/documents';
@@ -17,7 +16,6 @@ import { DocumentService } from '../../services/document.service';
   imports: [
     CommonModule,
     FormsModule,
-    MatFormFieldModule,
     MatInputModule,
     MatSelectModule
   ],

@@ -37,12 +37,12 @@ export class DocumentService {
     // View a document
   viewDocument(id: number) {
     // Implement view logic, e.g., open in a new tab
-    window.open(`http://localhost:8080/api/documents/?id=${id}`, '_blank');
+    window.open(`${this.apiUrl}/documents/?id=${id}`, '_blank');
   }
 
   downloadDocument($filepath: string) {
     // Implement download logic
-    window.location.href = `http://localhost:8080${$filepath}`;
+    window.location.href = `${this.apiUrl}${$filepath}`;
   }
 
   // Search documents

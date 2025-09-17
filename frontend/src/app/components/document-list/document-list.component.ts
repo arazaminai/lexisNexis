@@ -1,10 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { DetailsDialogueComponent } from './details/details-dialogue.component';
 import { DeleteDialog } from './delete/delete-dialogue.component';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,11 +16,9 @@ import { DocumentSearchService } from '../../services/document-search.service';
   standalone: true,
   imports: [
     CommonModule,
-    MatCardModule,
     MatIconModule,
     MatButtonModule,
     MatPaginatorModule,
-    MatSnackBarModule
   ],
   templateUrl: './document-list.component.html',
   styleUrls: ['./document-list.component.scss']
