@@ -1,4 +1,13 @@
 <main>
+    <mat-paginator class="paginator"
+        [length]="documents.length" 
+        [pageSize]="10" 
+        (page)="onPageChange($event)" 
+        showFirstLastButtons
+        [hidePageSize]="true"
+        >
+    </mat-paginator>
+
     <div class="docs-container">
         <div 
             class="doc-card" 
@@ -27,10 +36,5 @@
         </div>
     </div>
 
-    <mat-paginator class="paginator"
-        [length]="documents.length" 
-        [pageSize]="20" 
-        (page)="onPageChange($event)" 
-        showFirstLastButtons>
-    </mat-paginator>
+    
 </main>

@@ -26,7 +26,7 @@ import { DocumentSearchService } from '../../services/document-search.service';
 export class DocumentListComponent {
   @Input() documents: any[] = [];       // full document list
   pagedDocuments: any[] = [];  // current page
-  pageSize = 16;
+  pageSize = 10;
   pageIndex = 0;
 
   constructor(
