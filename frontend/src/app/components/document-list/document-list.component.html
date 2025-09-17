@@ -1,10 +1,20 @@
-<div *ngIf="!documents?.length">No results found.</div>
+<div class="document-list">
+  <div class="document-card" *ngFor="let doc of documents">
+    <mat-card>
+      <mat-icon class="doc-icon">
+        {{ doc.filetype === 'application/pdf' ? 'picture_as_pdf' : 'description' }}
+      </mat-icon>
 
-<div *ngFor="let doc of documents" class="doc">
-  <h3>{{ doc.filename }}</h3>
-  <p [innerHTML]="doc.highlight || ''"></p>
-  <small>{{ doc.filetype }} - {{ doc.uploaded_at }}</small>
-  <button (click)="viewDocument(doc.id)">View Document</button>
-  <button (click)="downloadDocument(doc.filepath)">Download</button>
-  <button (click)="deleteDocument(doc.id)">Delete</button>
+      <mat-card-content (click)="openDocumentDialog(doc)">
+        <h4>{{ doc.filename }}</h4>
+        <p>{{ doc.uploaded_at | date:'short' }}</p>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-icon-button color="warn" (click)="confirmDelete(doc)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
 </div>

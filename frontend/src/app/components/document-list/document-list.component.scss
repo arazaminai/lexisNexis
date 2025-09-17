@@ -1,0 +1,56 @@
+.document-list {
+  display: grid;
+  gap: 16px;
+
+  /* Default for mobile: 1 column */
+  grid-template-columns: repeat(1, 1fr);
+
+  @media (min-width: 600px) {
+    /* Tablet: 2 columns */
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    /* Desktop: 4 columns */
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.document-card mat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 220px; /* Equal height for all cards */
+  padding: 16px;
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.document-card mat-card:hover {
+  transform: scale(1.03);
+}
+
+.doc-icon {
+  font-size: 48px;
+  margin-bottom: 8px;
+  color: #3f51b5;
+}
+
+mat-card h4 {
+  text-align: center;
+  word-break: break-word;
+  font-size: 1rem;
+}
+
+mat-card p {
+  text-align: center;
+  font-size: 0.85rem;
+  color: gray;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}

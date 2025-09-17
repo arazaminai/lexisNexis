@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>{{ data.filename }}</h2>
+<mat-dialog-content>
+    <p><strong>File type:</strong> {{ data.filetype }}</p>
+    <p><strong>Uploaded at:</strong> {{ data.uploaded_at | date:'medium' }}</p>
+    <p *ngIf="data.highlight"><strong>Preview:</strong></p>
+    <p [innerHTML]="data.highlight"></p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <a [href]="'http://localhost:8080' + data.filepath" target="_blank">
+    <button mat-button>Download</button>
+    </a>
+    <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>
