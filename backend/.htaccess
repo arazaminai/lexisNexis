@@ -3,4 +3,7 @@ RewriteEngine On
 Options -Indexes
 
 RewriteRule (^|/)\. - [F]
-RewriteRule ^(static/cache|src|docker)/ - [F,L]
+
+RewriteCond %{REQUEST_URI} !^/api
+RewriteCond %{REQUEST_URI} !^/static/uploads
+RewriteRule ^ - [F]
