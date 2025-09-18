@@ -29,9 +29,11 @@ class SearchService {
         // --- 2. Run full-text query ---
         $results = $this->documentDB->fullTextSearch($query);
 
+        
         // --- 3. Highlight keywords ---
         foreach ($results as &$row) {
-            $row['highlight'] = $this->highlightSnippet($row['id'], $query);
+            $content = $this->documentDB->getDocumentContent($row['id']);
+            $row['highlight'] = $this->highlightSnippet($content, $query);
         }
 
         // --- 4. Store in cache ---
@@ -43,8 +45,7 @@ class SearchService {
         ];
     }
 
-    private function highlightSnippet($docId, $query) {
-        $content = $this->documentDB->getDocumentContent($docId);
+    public function highlightSnippet($content, $query) {
 
         if (!$content) return null;
 
