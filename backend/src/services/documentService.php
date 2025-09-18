@@ -2,14 +2,18 @@
 require_once __DIR__ . '/../db/documents.php';
 require_once __DIR__ . '/../errors/fileNotFound.php';
 require_once __DIR__ . '/../services/documentService.php';
+require_once "cache.php";
 
 class DocumentService {
     private $documentDB;
     private $uploadfolder = "/static/uploads/";
     private $uploadpath;
+    private $cache;
 
     public function __construct() {
         $this->documentDB = new DocumentDB();
+        $this->cache = new Cache();
+
         $this->uploadpath = __DIR__ .  "/../.." . $this->uploadfolder;
         if (!is_dir($this->uploadpath)) {
             mkdir($this->uploadpath, 0777, true);   
@@ -40,6 +44,8 @@ class DocumentService {
             unlink($this->uploadpath . $doc['filepath']);
         }
         $this->documentDB->deleteDocument($id);
+
+        $this->cache->clear();
         return;
     }
 
@@ -69,6 +75,7 @@ class DocumentService {
         // Insert into index
         $this->documentDB->insertDocumentIndex($docId, $content);
 
+        $this->cache->clear();
         return $docId;
     }
 

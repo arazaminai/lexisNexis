@@ -57,7 +57,11 @@ class SearchService {
         if (preg_match('/<mark>/', $snippet, $matches, PREG_OFFSET_CAPTURE)) {
             $start = max(0, $matches[0][1] - 100);
             $end = min(strlen($snippet), $start + 200);
-            return substr($snippet, $start, $end - $start) . "...";
+            $result = substr($snippet, $start, $end - $start);
+            if (strlen($content) > strlen($result)) {
+                $result .= '...';
+            }
+            return $result;
         }
     }
 }
