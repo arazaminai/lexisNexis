@@ -34,7 +34,7 @@ export class SearchBarComponent {
 
   ) {
     this.searchSubject.pipe(
-      debounceTime(300),
+      debounceTime(10),
       switchMap(q => this.search(q ?? ""))
     ).subscribe((res: { results: Document[] }) => {
       this.results = Array.isArray(res.results) ? res.results : [];
