@@ -2,7 +2,7 @@
 class Cache {
     protected string $cacheDir;
 
-    public function __construct(string $cacheDir = __DIR__ . '/../static/cache') {
+    public function __construct(string $cacheDir = __DIR__ . '/../../static/cache') {
         $this->cacheDir = rtrim($cacheDir, '/') . '/';
         if (!is_dir($this->cacheDir)) {
             mkdir($this->cacheDir, 0777, true);

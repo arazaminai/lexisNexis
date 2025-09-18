@@ -5,10 +5,15 @@ require_once __DIR__ . '/../services/documentService.php';
 
 class DocumentService {
     private $documentDB;
-    private $uploadpath = __DIR__ .  "/../../static/uploads/";
+    private $uploadfolder = "/static/uploads/";
+    private $uploadpath;
 
     public function __construct() {
         $this->documentDB = new DocumentDB();
+        $this->uploadpath = __DIR__ .  "/../../" . $this->uploadfolder;
+        if (!is_dir($this->uploadpath)) {
+            mkdir($this->uploadpath, 0777, true);   
+        }
     }
 
     public function listAllDocuments(): array {
@@ -53,7 +58,7 @@ class DocumentService {
         // Insert metadata
         $docId = $this->documentDB->insertDocumentMeta(
                     $file['name'],
-                    $this->uploadpath . basename($targetFile),
+                    $this->uploadfolder . basename($targetFile),
                     $file['type'],
                     $file['size']
                 );
