@@ -23,7 +23,7 @@ services:
       context: .
       dockerfile: Dockerfile.frontend.prod
     ports:
-      - "4200:80"
+      - "80:80"
     networks:
       - app-network
     environment:
