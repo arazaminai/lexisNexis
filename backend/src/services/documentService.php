@@ -10,7 +10,7 @@ class DocumentService {
 
     public function __construct() {
         $this->documentDB = new DocumentDB();
-        $this->uploadpath = __DIR__ .  "/../../" . $this->uploadfolder;
+        $this->uploadpath = __DIR__ .  "/../.." . $this->uploadfolder;
         if (!is_dir($this->uploadpath)) {
             mkdir($this->uploadpath, 0777, true);   
         }

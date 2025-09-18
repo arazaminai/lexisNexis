@@ -17,10 +17,7 @@ class SearchController extends Controller {
     public function searchDocuments() {
         $results = $this->searchService->searchDocuments($this->query);    
         
-        return $this->jsonResponse([
-            "cached" => false,
-            "results" => $results
-        ]);
+        return $this->jsonResponse($results);
     }
 
     
