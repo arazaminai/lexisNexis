@@ -60,8 +60,15 @@ export class UploadDocumentComponent {
         this.uploadComplete.emit();
       },
       error: (err: any) => {
-        console.error(err);
-        this.uploadStatus = '❌ Upload failed. Check console for details.';
+        if (err.status === 422) {
+          this.uploadStatus = '❌ Invalid file type. Please upload a txt or pdf file.';
+          return;
+        }
+        if (err.status === 500) {
+          this.uploadStatus = '❌ Server error during upload. Please try again later.';
+          return;
+        }
+        this.uploadStatus = '❌ Upload failed. Please try again.';
       }
     });
   }
