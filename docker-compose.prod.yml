@@ -13,6 +13,8 @@ services:
       - MYSQL_USER=lexisuser
       - MYSQL_PASSWORD=lexispass
       - MYSQL_ROOT_PASSWORD=lexisroot
+    volumes:
+      - files_data_prod:/var/www/html/static/uploads
     depends_on:
       - db
     networks:
@@ -52,6 +54,7 @@ services:
 
 volumes:
   db_data_prod:
+  files_data_prod:
 
 networks:
   app-network:
