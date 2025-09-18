@@ -14,7 +14,10 @@ RUN apt-get update \
         php8.3 \
         php8.3-cli \
         php8.3-common \
-        php8.3-mysql \       
+        php8.3-mysql \
+        php8.3-xml \
+        php8.3-mbstring \
+        composer \
         poppler-utils \
     && echo "ServerName localhost" > /etc/apache2/conf-available/servername.conf \
     && a2enconf servername \

@@ -1,6 +1,5 @@
 <?php
 require_once 'controller.php';
-require_once __DIR__ . "/../cache.php";
 require_once __DIR__ . '/../services/searchService.php';
 
 class SearchController extends Controller {

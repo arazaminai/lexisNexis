@@ -65,7 +65,7 @@ class DocumentService {
         return $docId;
     }
 
-    private function storeFile($file) {
+    public function storeFile($file) {
         $allowed = ['text/plain', 'application/pdf'];
         if (!in_array($file['type'], $allowed)) {
             throw new UnexpectedValueException("Only TXT or PDF files allowed");
