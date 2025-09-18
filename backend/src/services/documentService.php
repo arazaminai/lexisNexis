@@ -45,6 +45,8 @@ class DocumentService {
             throw new InvalidArgumentException("No file uploaded or upload error");
         }
 
+        // set the file unique name
+        $file['name'] = $this->getUniqueFilename($this->uploadpath, $file['name']);
         // Store file
         $targetFile = $this->storeFile($file);
 

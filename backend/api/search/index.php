@@ -1,7 +1,7 @@
 <?php
 require_once '../../src/controllers/searchController.php';
 
-header("Access-Control-Allow-Origin: http://localhost"); // or "*" for all origins
+header("Access-Control-Allow-Origin: *"); // or "*" for all origins
 header("Access-Control-Allow-Methods: GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 

@@ -4,12 +4,12 @@ class Db {
     private $pdo;
 
     public function __construct() {
-        $env = parse_ini_file(__DIR__ . '/../../.env');
-        $dsn = "mysql:host=" . $env['MYSQL_HOST'] . 
-            ";dbname=" . $env['MYSQL_DATABASE'] . 
-            ";port=" . $env['MYSQL_PORT'];
-        $username = $env['MYSQL_USER'];
-        $password = $env['MYSQL_PASSWORD'];
+        // $env = $_ENV;
+        $dsn = "mysql:host=" . getenv('MYSQL_HOST') . 
+            ";dbname=" . getenv('MYSQL_DATABASE') . 
+            ";port=" . getenv('MYSQL_PORT');
+        $username = getenv('MYSQL_USER');
+        $password = getenv('MYSQL_PASSWORD');
 
         $this->connect($dsn, $username, $password);
 
