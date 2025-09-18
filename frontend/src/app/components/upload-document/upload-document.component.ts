@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { DocumentService } from '../../services/document.service';
 
 @Component({
   selector: 'app-upload-document',
@@ -16,7 +16,7 @@ export class UploadDocumentComponent {
   dragOver = false;
   uploadStatus = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private docService: DocumentService) {}
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -54,12 +54,12 @@ export class UploadDocumentComponent {
     const formData = new FormData();
     formData.append('document', this.selectedFile);
 
-    this.http.post('http://localhost:8080/api/documents/', formData).subscribe({
+    this.docService.uploadDocument(formData).subscribe({
       next: () => {
         this.selectedFile = null;
         this.uploadComplete.emit();
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error(err);
         this.uploadStatus = '❌ Upload failed. Check console for details.';
       }

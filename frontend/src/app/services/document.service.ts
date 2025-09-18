@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class DocumentService {
-  private host = environment.apiHost; 
+  private host = environment.backendApiUrl; 
   private apiUrl = `${this.host}/api`; 
   
   private refereshSubject = new BehaviorSubject<boolean>(false);
@@ -23,16 +23,14 @@ export class DocumentService {
     return this.host;
   }
 
-  // Upload a document
-  uploadDocument(file: File): Observable<any> {
-    const formData = new FormData();
-    formData.append('file', file);
-    return this.http.post(`${this.apiUrl}/documents`, formData);
+  // Upload a document and throw an error if it fails
+  uploadDocument(formData: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/documents/`, formData);
   }
 
   // List all documents
-  listDocuments(): Observable<Document[]> {
-    return this.http.get<Document[]>(`${this.apiUrl}/documents/`);
+  listDocuments(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/documents/`);
   }
 
     // Delete a document
