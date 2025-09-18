@@ -1,0 +1,19 @@
+FROM node:22-alpine
+
+WORKDIR /usr/src/app
+
+COPY frontend/package*.json ./
+# COPY frontend/ .
+
+RUN npm install -g @angular/cli
+
+RUN npm install
+
+COPY frontend/ .
+
+COPY frontend/public/env.js /usr/src/app/public/env.js
+RUN sed -i "s|\${BACKEND_API_URL}|${BACKEND_API_URL}|g" /usr/src/app/public/env.js
+
+EXPOSE 4200
+
+CMD ["ng", "serve", "--host", "0.0.0.0"]

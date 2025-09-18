@@ -1,0 +1,58 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8080:80"
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=lexisnexis
+      - MYSQL_USER=lexisuser
+      - MYSQL_PASSWORD=lexispass
+      - MYSQL_ROOT_PASSWORD=lexisroot
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend.prod
+    ports:
+      - "4200:80"
+    networks:
+      - app-network
+    environment:
+      - NODE_ENV=production
+      - BACKEND_API_URL=http://backend:80/
+    depends_on:
+      - backend
+
+  db:
+    image: mysql:8.3
+    restart: always
+    environment:
+      MYSQL_DATABASE: lexisnexis
+      MYSQL_USER: lexisuser
+      MYSQL_PASSWORD: lexispass
+      MYSQL_ROOT_PASSWORD: lexisroot
+    volumes:
+      - db_data_prod:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+volumes:
+  db_data_prod:
+
+networks:
+  app-network:
+    driver: bridge
