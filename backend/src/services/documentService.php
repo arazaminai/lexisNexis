@@ -34,14 +34,14 @@ class DocumentService {
     }
 
     public function deleteDocumentById($id) {
-        $doc = $this->documentDB->getDocument($id, ["filepath"]);
+        $doc = $this->documentDB->getDocument($id, ["filename"]);
 
         if (!$doc) {
             throw(new FileNotFound("Document not found"));
         }
 
-        if (file_exists($this->uploadpath . $doc['filepath'])) {
-            unlink($this->uploadpath . $doc['filepath']);
+        if (file_exists($this->uploadpath . $doc['filename'])) {
+            unlink($this->uploadpath . $doc['filename']);
         }
         $this->documentDB->deleteDocument($id);
 

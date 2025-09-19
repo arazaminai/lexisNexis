@@ -1,0 +1,4 @@
+cache/
+uploads/
+.env
+vendor
