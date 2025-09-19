@@ -45,7 +45,7 @@ A full-stack document management system with the following stack:
    docker-compose -f docker-compose.prod.yml up --build -d
    ```
 
-   - Frontend (NGINX): [http://localhost:4200](http://localhost)  
+   - Frontend (NGINX): [http://localhost](http://localhost)  
    - Backend (PHP/Apache): [http://localhost:8080](http://localhost:8080)  
 
 ---
